@@ -1,101 +1,179 @@
-# 1. 리액트 프로젝트 초기세팅
+# 1. JSX 문법
 
-## 1.1 리액트 프로젝트 생성
+## 1.1 감싸인 요소
 
-- `npx create-react-app ./`
-- `yarn create-react-app ./`
+- JSX 파일(컴포넌트)은 첫글자를 대문자
+- <></> Fragment
+- src/Main.js
 
-## 1.2 파일 정리
+```js
+import from "react";
 
-- src/test 파일들 삭제
-- App.css 파일 삭제
-- indext.js 파일 정리
-- index.css 파일 수정
+const Main = () => {
+  return (
+    <>
+      <h1>리액트 안녕</h1>
+      <h2>리액트 안녕</h2>
+    </>
+  );
+};
 
-```css
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  outline-style: none;
-}
-ul,
-li {
-  list-style: none;
-}
-a {
-  color: #000000;
-  text-decoration: none;
-}
-img {
-  vertical-align: middle;
-  border: 0;
-}
-html {
-  font-size: 16px;
-}
-body {
-  font-family: "Pretendard-Regular", sans-serif;
-  font-size: 1rem;
-  line-height: 1.25;
-  letter-spacing: -0.23px;
-  word-break: keep-all;
-  color: #000000;
-}
+export default Main;
 ```
 
-## 1.3 React 개발 편의 도구 설치
+## 1.2 자바스크립트 표현
 
-- React 크롬 개발 도구 [DevTools](https://chromewebstore.google.com/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=ko)
-- VSCode React Plugin (ES7+ React/Redux/React-Native snippets ) 설치
+- JSX 안에서 자바스크립트 표현식 코드를 {}로 감싸면 된다.
 
-## 1.4 normalize.css 설정(css초기화)
+```js
+import React from "react";
 
-- `yarn add normalize.css`
-- src/index.js 에서 index.css 위에 import
+const Main = () => {
+  const title = "React";
 
-## 1.5 scss, emotion.js 설치
+  return (
+    <>
+      <h1>{title} 안녕</h1>
+      <h2>{title} 안녕</h2>
+    </>
+  );
+};
 
-- `yarn add sass`
-- `yarn add @emotion/react`
-- `yarn add @emotion/styled`
-
-## 1.6 ESLint, prettier 설정
-
-- .prettierrc.json
-
-```json
-{
-  "singleQuote": false,
-  "semi": true,
-  "useTabs": false,
-  "tabWidth": 2,
-  "trailingComma": "all",
-  "printWidth": 80,
-  "arrowParens": "avoid",
-  "endOfLine": "auto"
-}
+export default Main;
 ```
 
-- ESLint 설정
+## 1.3 If문 대신 조건부 연산자(삼향 연산자)
 
-  - `yarn add eslint --dev`
-  - `npx eslint --init`
-  - `yarn eslint --init`
-  - To check syntax and find problems 선택
-  - JavaScript modules (import/export) 선택
-  - React 선택
-  - Does your project use TypeScript? No 선택
-  - Where does your code run? Browser 선택
-  - What format do you want your config file to be in? JavaScript 선택
-  - Would you like to install them now? Yes 선택
-  - Which package manager do you want to use? npm 선택
+- JSX 내부의 자바스크립트 표현식에서 if문을 사용할 수 없다.
+- JSX 밖에서 if문을 사용하여 사전에 값을 설정하거나
+- 조건부 연산자(삼향 연산자)를 사용한다.
 
-  - ESLint와 Prettier를 연결하여 ESLint 설정
+```js
+import React from "react";
 
-    - `yarn add eslint-config-prettier --save-dev`
-    - .eslintrc.js
+const Main = () => {
+  const title = "리액트";
 
-  - 바벨에 의한 경고 제외
-    - `yarn add @babel/plugin-proposal-private-property-in-object --dev`
-    - `npm i @babel/plugin-proposal-private-property-in-object --dev`
+  return (
+    <>
+      {title === "리액트" ? (
+        <h1>리액트입니다.</h1>
+      ) : (
+        <h2>리액트가 아닙니다.</h2>
+      )}
+    </>
+  );
+};
+
+export default Main;
+```
+
+## 1.4 AND 연산(&&)를 사용한 조건부 렌더링
+
+```js
+import React from "react";
+
+const Main = () => {
+  const title = "리액트";
+
+  return <>{title === "리액트" && <h1>리액트입니다.</h1>}</>;
+};
+
+export default Main;
+```
+
+## 1.5 undefined를 렌더링하지 않기
+
+- OR ||
+
+```js
+import React from "react";
+
+const Main = () => {
+  const title = undefined;
+
+  return <div>{title}</div>;
+};
+
+export default Main;
+```
+
+## 1.6 인라인 스타일링
+
+- DOM 요소에 스타일을 적용할 때는 문자열이 아닌 객체 형태로
+- 카멜케이스
+
+```js
+import React from "react";
+
+const Main = () => {
+  const title = "리액트";
+
+  return (
+    <div
+      style={{ backgroundColor: "pink", fontSize: "48px", fontWeight: "bold" }}
+    >
+      {title}
+    </div>
+  );
+};
+
+export default Main;
+```
+
+```js
+import React from "react";
+
+const Main = () => {
+  const title = "리액트";
+
+  const style = {
+    backgroundColor: "pink",
+    fontSize: "48px",
+    fontWeight: "bold",
+  };
+
+  return <div style={style}>{title}</div>;
+};
+
+export default Main;
+```
+
+## 1.7 class 대신 className
+
+```js
+import React from "react";
+import "./react.css";
+
+const Main = () => {
+  const title = "리액트";
+
+  return <div className="react">{title}</div>;
+};
+
+export default Main;
+```
+
+## 1.8 styled-component (Emotion)
+
+- CSS in JS
+
+```js
+import React from "react";
+import "./react.css";
+import styled from "@emotion/styled";
+
+const StyledTitle = styled.div`
+  background-color: pink;
+  font-size: 48px;
+  font-weight: bold;
+`;
+
+const Main = () => {
+  const title = "리액트";
+
+  return <StyledTitle>{title}</StyledTitle>;
+};
+
+export default Main;
+```
