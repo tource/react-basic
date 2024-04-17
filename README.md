@@ -1,189 +1,66 @@
-# 5. 컴포넌트 반복
+# 6. Hooks
 
-## 5.1 자바스크립트 배열의 map() 메서드
-
-- https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Array/map
-
-## 5.2 데이터 배열을 컴포넌트 배열로 변환하기
-
-```js
-import React from "react";
-
-const Main = () => {
-  const usernames = ["홍길동", "임꺽정", "알라딘", "지니", "미키마우스"];
-
-  return (
-    <div>
-      <ul>
-        {usernames.map((username, index) => {
-          return <li key={index}>{username}</li>;
-        })}
-      </ul>
-    </div>
-  );
-};
-
-export default Main;
-```
-
-## 5.3 응용
-
-### 5.3.1 초기 상태 설정하기
+## 6.1 useState
 
 ```js
 import React, { useState } from "react";
 
-const initState = [
-  { id: 1, username: "알라딘" },
-  { id: 2, username: "지니" },
-  { id: 3, username: "홍길동" },
-  { id: 4, username: "임꺽정" },
-  { id: 5, username: "미키마우스" },
-];
-
-const Main = () => {
-  // member 목록 상태
-  const [members, setMembers] = useState(initState);
-  // id 상태
-  const [nextId, setNextId] = useState(6);
+const Counter = () => {
+  const [value, setValue] = useState(0);
 
   return (
     <div>
-      <ul>
-        {members.map(member => (
-          <li key={member.id}>{member.username}</li>
-        ))}
-      </ul>
+      <p>
+        현재 카운터 값은 <b>{value} 입니다.</b>
+      </p>
+      <button onClick={() => setValue(value + 1)}>1 증가</button>
+      <button onClick={() => setValue(value - 1)}>1 감소</button>
     </div>
   );
 };
 
-export default Main;
+export default Counter;
 ```
 
-### 5.3.2 데이터 추가 기능 구현하기
+## 6.2 useEffect
 
-- push가 아닌 concat을 사용하자 이유는 불변성유지(immutable)
-- 리액트에서는 상태를 업데이트할 때 기존 상태를 그대로 두면서 새로운 값을 설정해야한다.(불병성유지)
-- push는 기존 배열 자체를 변경
-- concat은 새로운 배열을 만들어 준다.
+- 컴포넌트가 렌더링될 때마다 특정 작업을 수행하도록 설정할 수 있는 Hook
+- 기본구조
 
 ```js
-import React, { useState } from "react";
-
-const initState = [
-  { id: 1, username: "알라딘" },
-  { id: 2, username: "지니" },
-  { id: 3, username: "홍길동" },
-  { id: 4, username: "임꺽정" },
-  { id: 5, username: "미키마우스" },
-];
-
-const Main = () => {
-  // member 목록 상태
-  const [members, setMembers] = useState(initState);
-  // id 상태
-  const [nextId, setNextId] = useState(6);
-  // input 상태
-  const [username, setUsername] = useState("");
-
-  const onChange = e => {
-    setUsername(e.target.value);
-  };
-
-  const onClick = () => {
-    // console.log("사용자 이름 추가할거임");
-    // 배열의 내장 함수 concat을 사용하여 새로운 항목을 추가한 배열로 만든다.
-    const nextMembers = members.concat({
-      id: nextId,
-      username: username,
-    });
-    setNextId(nextId + 1);
-    // console.log(nextId);
-    setMembers(nextMembers);
-    // console.log(nextMembers);
-    setUsername("");
-    // console.log("추가됐음");
-  };
-
-  return (
-    <div>
-      <input onChange={onChange} value={username} />
-      <button onClick={onClick}>사용자 추가</button>
-
-      <ul>
-        {members.map(member => (
-          <li key={member.id}>{member.username}</li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
-export default Main;
+useEffect(()=>{},[의존성 배열])
 ```
 
-### 5.3.3 데이터 제거 기능 구현하기
+### 6.2.1 마운트될 때만 실행하고 싶을 때
 
-- 각 항목을 더블클릭했을 때 화면에서 사라지는 기능
-- 불변성을 유지 하면서 업데이트 filter 함수 사용
-- filter 함수는 배열에서 특정 조건을 만족하는 원소들만 분류
+- 의존성 배열 빈배열
 
-```js
-import React, { useState } from "react";
+### 6.2.2 특정 값이 업데이트될 때만 실행하고 싶을 때
 
-const initState = [
-  { id: 1, username: "알라딘" },
-  { id: 2, username: "지니" },
-  { id: 3, username: "홍길동" },
-  { id: 4, username: "임꺽정" },
-  { id: 5, username: "미키마우스" },
-];
+- 의존성 배열 안에 검사하고 싶은 값을 넣어주면 됨
 
-const Main = () => {
-  // member 목록 상태
-  const [members, setMembers] = useState(initState);
-  // id 상태
-  const [nextId, setNextId] = useState(6);
-  // input 상태
-  const [username, setUsername] = useState("");
+### 6.2.3 뒷정리하기
 
-  // input 핸들러
-  const onChange = e => {
-    setUsername(e.target.value);
-  };
+- 참고: 컴포넌트의 라이프사이클
 
-  const onClick = () => {
-    const nextMembers = members.concat({
-      id: nextId,
-      username: username,
-    });
-    setNextId(nextId + 1);
-    setMembers(nextMembers);
-    setUsername("");
-  };
+  - 모든 리액트 컴포넌트에는 라이프사이클(생명주기)이 존재
+  - 컴포넌트의 수명은 페이지에 렌더링되기 전인 준비과정에서 시작하여 페이지에서 사라질 때 끝난다.
+  - 가끔 컴포넌트를 처음으로 렌더링할 때나 컴포넌트를 업데이트하기 전후로 어떤 작업을 처리해야할 수도 있다.
+  - 또한 불필요한 업데이트를 방지해야 할 수도 있다.
+  - 라이프사이클 메서드는 클래스형 컴포넌트에서만 사용가능
+  - 함수형 컴포넌트에서는 Hooks 기능을 사용하여 비슷한 작업을 처리
+  - 마운트(mount): DOM이 생성되고 웹 브라우저 상에 나타나는 것
+  - 업데이트(update)
 
-  // remove 이벤트 핸들러
-  const onRemove = id => {
-    const nextMembers = members.filter(member => member.id !== id);
-    setMembers(nextMembers);
-  };
+    - 컴포넌트는 다음 같은 총 네 가지 경우 업데이트한다.
+    - props가 바뀔 때
+    - state가 바뀔 때
+    - 상위 컴포넌트가 리렌더링될 때
 
-  return (
-    <div>
-      <input onChange={onChange} value={username} />
-      <button onClick={onClick}>사용자 추가</button>
+  - 언마운트(unmount): 컴포넌트를 DOM에서 제거하는 것
 
-      <ul>
-        {members.map(member => (
-          <li key={member.id} onDoubleClick={() => onRemove(member.id)}>
-            {member.username}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
-export default Main;
-```
+  - useEffect는 기본적으로 렌더링되고 난 직후마다 실행된다.
+  - 두 번째 파라미터 배열에 무엇을 넣는지에 따라 실행되는 조건이 달라진다.
+  - 컴포넌트가 언마운트 되기 전이나 업데이트 되기 직전에 어떠한 작업을 수행하고 싶다면 cleanUp 함수를 반환해주어야 한다.
+  - 렌더링 될 때마다 뒷정리 함수가 계속 나타난것을 확인 할 수 있다.
+  - 뒷정리 함수가 호출될 때는 업데이트 직전의 값을 보여준다.
