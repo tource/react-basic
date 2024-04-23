@@ -703,10 +703,10 @@ export default Articles;
 ```
 
 - 리팩토링
-- src/pages/Aricles.js
+- src/pages/Articles.js
 
 ```js
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Layout from "../components/Layout";
 import ArticleItem from "./ArticleItem";
 
@@ -738,7 +738,7 @@ const Articles = () => {
 export default Articles;
 ```
 
-- src/pages/AricleItem.js
+- src/pages/ArticleItem.js
 
 ```js
 import { NavLink } from "react-router-dom";
@@ -775,14 +775,14 @@ const NotFound = () => {
       style={{
         display: "flex",
         alignItems: "center",
-        WebkitJustifyContent: "center",
+        justifyContent: "center",
         fontSize: 64,
         position: "absolute",
         width: "100%",
         height: "100%",
       }}
     >
-      잘못된 경로로 접근하셨습니다.
+      404 error
     </div>
   );
 };
@@ -812,13 +812,52 @@ function App() {
       </Route>
 
       <Route path="/articles" element={<Articles />}>
-        <Route index element={<Navigate replace to="1" />}></Route>
+        <Route index element={<Navigate replace to="1" />} />
         <Route path=":id" element={<Article />} />
       </Route>
+
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
 
 export default App;
+```
+
+### 7.6.4 Navigate 컴포넌트
+
+- 예를 들어 로그인이 필요한 페이지인데 로그인을 안 했다면
+- 리다이렉트(redirect) 하고 싶을 때
+
+- src/pages/Login.js
+
+```js
+const Login = () => {
+  return <div>로그인 페이지</div>;
+};
+
+export default Login;
+```
+
+- src/pages/MyPage.js
+
+```js
+import { Navigate } from "react-router-dom";
+
+const MyPage = () => {
+  const isLogin = false;
+
+  //   if (!isLogin) {
+  //     return <Navigate to="/login" replace={true} />;
+  //   }
+
+  return (
+    <div>
+      <h2>마이페이지</h2>
+      {!isLogin && <Navigate to="/login" replace={true} />}
+    </div>
+  );
+};
+
+export default MyPage;
 ```
