@@ -1,11 +1,9 @@
-import CssModule from "./components/CssModule";
-import ScssComponent from "./components/ScssComponent";
-import StyledComponent from "./components/StyledComponent";
+import Axios from "./pages/Axios";
 
 function App() {
   return (
     <div>
-      <StyledComponent />
+      <Axios />
     </div>
   );
 }

@@ -3,6 +3,10 @@ import styled from "@emotion/styled";
 
 // Emotion은 첫 글자 무조건 대문자로
 
+const StyledBoxDiv = styled.div`
+  background-color: ${props => props.backgroundColor};
+`;
+
 const StyledButton = styled.button`
   background: white;
   color: black;
